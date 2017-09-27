@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Dados dos filmes mais vistos</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+
+  <p id="t1"></p> 
+  <div id="chart1"></div>
+  <p id="t2"></p> 
+  <div id="chart2"></div>
+  <p id="t3"></p> 
+  <div id="chart3"></div>
+  <p id="t4"></p> 
+  <div id="chart4"></div>
+
+  <script type="text/javascript">
+    d3.select("p#t1") 
+      .text("Bilheteria dos filmes"); 
+    d3.select("p#t2") 
+      .text("Custo de produção dos filmes"); 
+    d3.select("p#t3") 
+      .text("Lucro dos filmes"); 
+    d3.select("p#t4") 
+      .text("Desisto"); 
+  </script>
+
+
+<script type="text/javascript">
+    function render(data, graphID, color, wfunc, wfactor , comparator) 
+    {
+        d3.select(graphID).selectAll("div.h-bar")
+                .data(data)
+            .enter().append("div")
+            .attr("class", "h-bar")
+            .append("span");
+        
+        d3.select(graphID).selectAll("div.h-bar")
+                .data(data)
+            .style("background-color",color)
+            .attr("class", "h-bar")
+            .style("width", function (d) {
+                return wfunc(d) * wfactor + "px";
+            })
+            .select("span")
+                .text(function (d) {
+                    return d.Film;
+                });
+         if(comparator)
+            d3.select(graphID)
+                .selectAll("div.h-bar") 
+                .sort(comparator);
+    }
+
+    var getGross  = function (a) { return a.Worldwide_Gross_M;          }
+    var getBudget = function (a) { return a.Budget_M;                   }
+    var getProft  = function(a)  { return getGross(a) - getBudget(a);   }
+
+    var comparePorGross = function (a, b) { 
+        return getGross(a) < getGross(b);
+    };
+
+    var comparePorBudget = function (a, b) { 
+        return getBudget(a) < getBudget(b);
+    };
+
+    var comparePorProft = function (a, b) { 
+        return getProft(a) < getProft(b);
+    };
+
+    d3.json("movies.json", function(error, json){ 
+        render(json,"#chart1","#b30000",getGross, 0.30, comparePorGross);
+    });
+
+    d3.json("movies.json", function(error, json){ 
+        render(json,"#chart2","#9900cc",getBudget, 3.5, comparePorBudget);
+    });
+
+    d3.json("movies.json", function(error, json){ 
+        render(json,"#chart3","#006600",getProft, 0.5,comparePorProft);
+    });
+
+    var map = {};
+    map["Action"] = {Worldwide_Gross_M : 30, Budget_M : 2};
+    map["Drama"] = {Worldwide_Gross_M : 15, Budget_M : 1};
+
+    render(GenreMap,"#chart4","#006600",getGross, 0.5,comparePorGross);
+
+</script>
+</body>
+</html>
