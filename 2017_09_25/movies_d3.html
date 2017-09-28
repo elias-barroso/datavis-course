@@ -73,15 +73,15 @@
     };
 
     d3.json("movies.json", function(error, json){ 
-        render(json,"#chart1","#b30000",getGross, 0.30, comparePorGross);
+        render(json,"#chart1","#1FCAE7",getGross, 0.30, comparePorGross);
     });
 
     d3.json("movies.json", function(error, json){ 
-        render(json,"#chart2","#9900cc",getBudget, 3.5, comparePorBudget);
+        render(json,"#chart2","#7DE390",getBudget, 3.5, comparePorBudget);
     });
 
     d3.json("movies.json", function(error, json){ 
-        render(json,"#chart3","#006600",getProft, 0.5,comparePorProft);
+        render(json,"#chart3","#F59980",getProft, 0.5,comparePorProft);
     });
 
     var map = {};
