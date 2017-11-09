@@ -95,8 +95,8 @@
 	info.addTo(map);
 	
 	// get color depending on number of cases
-	let quantize = d3.scale.quantize()
-    .domain([0, 425])
+	let quantize = d3.scale.linear()
+    .domain([0,10, 15 ,30, 50, 100, 150, 300, 400])
     .range(brewerColors);
 
 	function style(feature) {
@@ -189,10 +189,10 @@
 
 		for (let i = 0; i < n; i++) {
 			let c = brewerColors[i];
-            let fromto = quantize.invertExtent(c);
+            let fromto = quantize.domain( );//   invertExtent(c);
 			labels.push(
 				'<i style="background:' + brewerColors[i] + '"></i> ' +
-				d3.round(fromto[0]) + (d3.round(fromto[1]) ? '&ndash;' + d3.round(fromto[1]) : '+'));
+				d3.round(fromto[i]) + (d3.round(fromto[i+1]) ? '&ndash;' + d3.round(fromto[i+1]) : '+'));
 		}
 
 		div.innerHTML = labels.join('<br>');
