@@ -119,6 +119,24 @@
               
               idDimension = facts.dimension(function(d) { return d.publicid; });
               idGrouping = idDimension.group(function(id) { return id; });
+              
+	      // handling map events:
+	      map.on('moveend', updateFilters);
+
+	      function updateFilters( ){
+
+	      markerLayer.eachLayer(function(layer) {
+	      if( map.getBounds().contains(layer.getLatLng()) )
+	      //add layer.publicid to some array visibleMarkers
+	      });
+
+	      idDimension.filterFunction(function(d){
+	        return visibleMarkers.indexOf(d) > -1;
+	      });
+
+	      dc.redrawAll();
+
+	      }
 
               //Create dataTable dimension using the date (dtg)
              var dateDimension = facts.dimension(function (d){
